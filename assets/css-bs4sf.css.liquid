@@ -1,0 +1,157 @@
+/**
+ * Bootstrap for Shopify
+ * Custom styles for Bootstrap v3.3.4
+ */
+
+
+/* Override default Bootstrap styles to allow Theme Settings.
+------------------------------------------------------------- */
+
+/* Base Font */
+body {
+  font-family: {{ settings.font_base }};
+}
+
+/* Heading Font */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: {{ settings.font_heading }};
+}
+
+/* Body Background */
+body {
+  background-color: {{ settings.body_background_color }};
+  {% if settings.body_background_image != 'none' %}
+  background: url('{{ 'custom_background_image' | asset_url | remove_first: 'https:' | remove_first: 'http:' }}') {{ settings.body_background_x }} {{ settings.body_background_y }} {{ settings.body_background_repeat }};
+  {% endif %}
+}
+
+
+/* Override default Bootstrap icons to use {{ asset_url }}
+------------------------------------------------------------- */
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('{{ 'glyphicons-halflings-regular.eot' | asset_url | remove_first: 'https:' | remove_first: 'http:' }}');
+  src: url('{{ 'glyphicons-halflings-regular.eot' | asset_url | remove_first: 'https:' | remove_first: 'http:' }}?#iefix') format('embedded-opentype'), url('{{ 'glyphicons-halflings-regular.woff' | asset_url | remove_first: 'https:' | remove_first: 'http:' }}') format('woff'), url('{{ 'glyphicons-halflings-regular.woff2' | asset_url | remove_first: 'https:' | remove_first: 'http:' }}') format('woff2'), url('{{ 'glyphicons-halflings-regular.ttf' | asset_url | remove_first: 'https:' | remove_first: 'http:' }}') format('truetype'), url('{{ 'glyphicons-halflings-regular.svg' | asset_url | remove_first: 'https:' | remove_first: 'http:' }}#glyphicons-halflingsregular') format('svg');
+}
+
+
+/* Navbar styling.
+------------------------------------------------------------- */
+
+{% if settings.navbar_positioning == 'fixed-top' %}
+body {
+  padding-top: 70px;
+}
+{% endif %}
+
+
+/* Styling for a simple footer.
+------------------------------------------------------------- */
+
+html, .footer {
+  background-color: {{ settings.footer_background_color }};
+}
+
+.footer {
+  text-align: center;
+  padding: 30px 0;
+  margin-top: 70px;
+  border-top: 1px solid #e5e5e5;
+}
+.footer p {
+  margin-bottom: 0;
+  color: #777;
+}
+.footer-links {
+  margin: 10px 0;
+  padding: 0;
+}
+.footer-links li {
+  display: inline;
+  padding: 0 2px;
+}
+.footer-links li:first-child {
+  padding-left: 0;
+}
+
+
+/* Responsive styling for the footer.
+------------------------------------------------------------- */
+
+/* Tablets */
+@media (max-width: 767px) {
+  .footer p {
+    margin-bottom: 9px;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .footer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+
+/* Sprites for Payment Method and Social
+------------------------------------------------------------- */
+
+/* Base Sprite */
+.sprite {
+  display: inline-block;
+  background: transparent url({{ 'img-bs4sf-sprite.png' | asset_url | remove_first: 'https:' | remove_first: 'http:' }}) no-repeat;
+}
+
+/* Use a double-sized Sprite on high-resolution devices. */
+@media only screen and (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+  .sprite {
+    background-image: url({{ 'img-bs4sf-sprite-2x.png' | asset_url | remove_first: 'https:' | remove_first: 'http:' }});
+    background-size: 148px 134px;
+  }
+}
+
+/* Payment Method Sprites */
+.sprite-pay {
+  width: 37px;
+  height: 22px;
+}
+
+/* Social Media Sprites */
+.sprite-social {
+  width: 24px;
+  height: 24px;
+}
+
+/* Individual Sprites */
+.sprite.pay_amex { background-position: 0px 0px; }
+.sprite.pay_credit { background-position: -37px 0px; }
+.sprite.pay_dankort { background-position: 0px -22px; }
+.sprite.pay_diners { background-position: -37px -22px; }
+.sprite.pay_discover { background-position: 0px -44px; }
+.sprite.pay_forbru { background-position: -37px -44px; }
+.sprite.pay_google { background-position: -74px 0px; }
+.sprite.pay_jcb { background-position: -74px -22px; }
+.sprite.pay_laser { background-position: -74px -44px; }
+.sprite.pay_maestro { background-position: 0px -66px; }
+.sprite.pay_mastercard { background-position: -37px -66px; }
+.sprite.pay_money { background-position: -74px -66px; }
+.sprite.pay_visa { background-position: 0px -88px; }
+.sprite.pay_shopify { background-position: -37px -88px; }
+.sprite.pay_solo { background-position: -74px -88px; }
+.sprite.pay_paypal { background-position: -111px 0px; }
+.sprite.social_email { background-position: -111px -22px; }
+.sprite.social_facebook { background-position: -111px -46px; }
+.sprite.social_flickr { background-position: -111px -70px; }
+.sprite.social_google_plus { background-position: 0px -110px; }
+.sprite.social_linkedin { background-position: -24px -110px; }
+.sprite.social_pinterest { background-position: -48px -110px; }
+.sprite.social_tumblr { background-position: -72px -110px; }
+.sprite.social_twitter { background-position: -96px -110px; }
+.sprite.social_youtube { background-position: -120px -110px; }
+
+
+.carousel-inner > .item > a > img, .carousel-inner > .item > img {
+  width: 100%;
+}

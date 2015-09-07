@@ -1,0 +1,22 @@
+{% comment %}
+
+  This snippet renders a product into a product list.
+  By default, it's only used by the product-list.liquid snippet.
+
+{% endcomment %}
+<a href="{{ product.url | within: collection }}" title="{{ product.title }}" class="thumbnail">
+  <img src="{{ product.images.first | product_img_url: 'large' }}" alt="{{ product.title }}" />
+</a>
+
+<h5>
+  <a href="{{ product.url | within: collection }}" title="{{ product.title }}">{{ product.title }}</a>
+  {% if product.compare_at_price_max > product.price and settings.product_show_sale_tag %}
+  <span class="label label-success">SALE</span>
+  {% endif %}
+</h5>
+
+<p class="lead text-muted">
+  {% if product.compare_at_price_max > product.price %}<del>{{ product.compare_at_price_max | money }}</del> {% endif %}
+  {% if product.price_varies %} from {% endif %}
+  {{ product.price | money }}
+</p>

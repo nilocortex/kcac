@@ -1,0 +1,35 @@
+{% assign page = pages.frontpage %}
+{{ page.content }}
+
+<div class="row">
+
+  {% assign collection = collections | first %}
+
+  <!--
+    Lay out the page depending on whether the carousel is set to be
+    displayed or not.
+  -->
+  {% if settings.slideshow_show %}
+
+    <!-- Display the carousel, then the first 6 products in rows of 2. -->
+    <div class="col-md-8">
+      {% include 'slideshow' %}
+    </div>
+    <div class="col-md-4">
+      {% for product in collection.products limit:6 %}
+        {% include 'product-list' with '2' %}
+      {% endfor %}
+    </div>
+
+  {% else %}
+
+    <!-- Display the first 6 products in a row of 6. -->
+    <div class="col-md-12">
+      {% for product in collection.products limit:6 %}
+        {% include 'product-list' with '6' %}
+      {% endfor %}
+    </div>
+
+  {% endif %}
+
+</div>

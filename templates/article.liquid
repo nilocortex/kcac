@@ -1,0 +1,113 @@
+<header class="page-header">
+    <!-- Atom Feed Subscribe Link -->
+    <a href="{{ blog.url }}.atom" title="Subscribe to Atom Feed" class="pull-right"><span class="glyphicon glyphicon-pushpin"></span></a>
+
+    <!-- Blog Title -->
+    <h1>{{ blog.title }}</h1>
+</header>
+
+<!-- Article title. -->
+<h2>{{ article.title }}</h2>
+
+<!-- Article byline and content. -->
+<h3 class="lead text-muted">{{ article.published_at | date: "%d %B %Y" }} by {{ article.author }}</h3>
+{{ article.content }}
+
+<!-- Pager to previous and next articles in this blog. -->
+<ul class="pager">
+  {% if blog.previous_article %}
+  <li class="previous"><a href="{{ blog.previous_article }}">&larr; Older</a></li>
+  {% else %}
+  <li class="previous disabled"><a href="{{ article.url }}">&larr; Older</a></li>
+  {% endif %}
+
+  {% if blog.next_article %}
+  <li class="next"><a href="{{ blog.next_article }}">Newer &rarr;</a></li>
+  {% else %}
+  <li class="next disabled"><a href="{{ article.url }}">Newer &rarr;</a></li>
+  {% endif %}
+</ul>
+
+<!-- List new and existing comments, if comments are enabled. -->
+{% if blog.comments_enabled? %}
+{% paginate article.comments by 20 %}
+<div class="row">
+  <div class="col-md-12">
+
+    <!-- Display any just-posted comments. -->
+    {% if comment and comment.created_at %}
+      {% include 'comment' with comment %}
+    {% endif %}
+
+    <!-- List existing comments. -->
+    {% for comment in article.comments %}
+      {% include 'comment' with comment %}
+    {% endfor %}
+    
+  </div>
+</div>
+
+<hr />
+
+<!-- Provide a form to add new comments, and pagination for existing comments. -->
+<div class="row">
+
+  <!-- Pagination for existing comments. -->
+  <div class="col-md-8 col-md-push-4 text-center">
+    {% include 'pagination' with 'comment' %}
+  </div>
+
+  <!-- Form for addition of new comments. -->
+  <div class="col-md-4 col-md-pull-8">
+    <h4>Leave a  Reply</h4>
+
+    <p class="text-muted">All fields are required. We won't spam you!</p>
+
+    {% form article %}
+
+      <!-- Display any comment submit errors. -->
+      {% if form.errors %}
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title">Error posting comment</h3>
+        </div>
+        <div class="panel-body">
+          <p>Sorry! An error occurred while posting your comment:</p>
+          <ul>
+            {% for field in form.errors %}
+              <li>The {{ field | capitalize | replace: 'Body', 'Message' }} field {{ form.errors.messages[field] }}.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Message -->
+      <div class="form-group">
+        <label for="comment[body]">Message</label>
+        <textarea rows="5" class="form-control" id="comment[body]" name="comment[body]" placeholder="Your Comment">{{ form.body }}</textarea>
+      </div>
+
+      <!-- Name -->
+      <div class="form-group">
+        <label for="comment[author]">Your Name</label>
+        <input type="text" class="form-control" id="comment[author]" name="comment[author]" placeholder="Your Name" value="{{ form.author }}">
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="comment[email]">Email</label>
+        <input type="text" class="form-control" id="comment[email]" name="comment[email]" placeholder="Email Address" value="{{ form.email }}">
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-default btn-lg">Post Reply</button>
+
+    {% endform %}
+
+  </div>
+
+</div>
+
+{% endpaginate %}
+{% endif %}

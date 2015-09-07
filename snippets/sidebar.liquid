@@ -1,0 +1,18 @@
+{% comment %}
+
+  This snippet renders the sidebar with the correct classes and position.
+  Theme settings allow selection of which links and widgets to show here.
+
+{% endcomment %}
+<aside class="{{ sidebar_class_sidebar }}">
+
+  <!-- Display linklist selected in theme settings using a list group. -->
+  {% unless linklists[settings.sidebar_linklist] == empty %}
+  <div class="list-group">
+    {% for link in linklists[settings.sidebar_linklist].links %}
+    <a href="{{ link.url }}" title="{{ link.title }}" class="list-group-item{% if link.active %} active{% endif %}">{{ link.title }}</a>
+    {% endfor %}
+  </div>
+  {% endunless %}
+
+</aside>

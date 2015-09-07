@@ -1,0 +1,65 @@
+<header class="page-header">
+  <h1>Your Account <small>Register New Account</small></h1>
+</header>
+
+<!-- Create Customer Form -->
+<div class="row">
+  <div class="col-md-4">
+
+    {% form 'create_customer' %}
+
+      <!-- Display any creation errors. -->
+      {% if form.errors %}
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title">Could not create account.</h3>
+        </div>
+        <div class="panel-body">
+          <ul>
+            {% for field in form.errors %}
+              <li>The {{ field | capitalize }} field {{ form.errors.messages[field] }}.</li>
+            {% endfor %}
+          </ul>
+        </div>      
+      </div>
+      {% endif %}
+
+      <!-- Name -->
+      <div class="form-group">
+        <label for="customer[first_name]">Name</label>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="customer[first_name]" name="customer[first_name]" value="{{form.first_name}}" placeholder="First" />
+          </div>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="customer[last_name]" name="customer[last_name]" value="{{form.last_name}}" placeholder="Last" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="customer[email]">Email</label>
+        <input type="text" class="form-control" id="customer[email]" name="customer[email]" value="{{form.email}}" placeholder="name@example.com" />
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="customer[password]">Password</label>
+        <input type="password" class="form-control" id="customer[password]" name="customer[password]" />
+      </div>
+
+      <!-- Register Button -->
+      <div class="form-group">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">Register Account</button>
+      </div>
+
+      <hr />        
+      <p class="text-center">
+        {{ 'Return to Login' | customer_login_link }}
+      </p>
+    {% endform %}
+    
+  </div>
+</div>

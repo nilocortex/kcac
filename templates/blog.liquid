@@ -1,0 +1,46 @@
+<header class="page-header">
+    <!-- Atom Feed Subscribe Link -->
+    <a href="{{ blog.url }}.atom" title="Subscribe to Atom Feed" class="pull-right"><span class="glyphicon glyphicon-pushpin"></span></a>
+
+    <!-- Blog Title -->
+    <h1>{{ blog.title }}</h1>
+</header>
+
+<div class="container">
+  <div class="row">
+
+    <!-- Articles List -->
+    <div class="col-md-9">
+      {% paginate blog.articles by 5 %}
+      {% for article in blog.articles %}
+        <h4><a href="{{ article.url }}">{{ article.title | escape }}</a> </h4>
+
+        {% if article.excerpt.size > 0 %}
+          {{ article.excerpt }}
+        {% else %}
+          <p>{{ article.content | strip_html | truncatewords: 50 }}</p>
+        {% endif %}
+
+        <small class="text-muted">{{ article.published_at | date: "%d %B %Y" }} by {{ article.author }}</small>
+      {% endfor %}
+
+      <div class="text-center">
+        {% include 'pagination' with 'post' %}
+      </div>
+      {% endpaginate %}
+    </div>
+
+    <!-- Blog Tags (Desktop & Tablet) -->
+    <div class="col-md-2 col-md-offset-1 hidden-xs text-right">
+      <h4 class="text-muted">Tags</h4>
+      {% include 'tag-list' with blog %}
+    </div>
+
+    <!-- Blog Tags (Phone) -->
+    <div class="col-md-2 col-md-offset-1 visible-xs text-center">
+      <h4 class="muted">Tags</h4>
+      {% include 'tag-list' with blog %}
+    </div>
+
+  </div>
+</div>

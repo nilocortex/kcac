@@ -1,0 +1,13 @@
+{% comment %}
+
+  This snippet renders a list of active payment method icons in the site
+  footer. It's only used in the one place but has been extracted into a
+  snippet to keep the main theme.liquid a little tidier.
+
+{% endcomment %}
+{% for setting in settings %}
+  {% if setting[0] contains 'pay_' and setting[1] %}
+    {% capture payment_title %}We accept {{ setting[0] | replace: 'pay_', '' | capitalize }}{% endcapture %}
+    <li><span class="sprite sprite-pay {{ setting[0] }}" title="{{ payment_title }}"></span></li>
+  {% endif %}
+{% endfor %}

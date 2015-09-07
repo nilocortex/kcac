@@ -1,0 +1,30 @@
+{% comment %}
+
+  This snippet renders a list of tags. It's used by default in:
+   - blog.liquid, for displaying a list of article tags; and
+   - collection.liquid, for displaying a list of product tags.
+
+  Currently active tags will be highlighted, and their link will remove them.
+  Currently inactive tags won't be highlighted, and their link will add them.
+
+  If any tags are active, a 'Clear Selected Tags' link will be shown.
+
+{% endcomment %}
+{% for tag in tag-list.all_tags %}
+  {% if current_tags contains tag %}
+    {% capture 'label' %}<span class="label label-info">{{ tag }}</span>{% endcapture %}
+    {{ label | link_to_remove_tag:tag }}
+  {% else %}
+    {% capture 'label' %}<span class="label label-default">{{ tag }}</span>{% endcapture %}
+    {{ label | link_to_add_tag:tag }}
+  {% endif %}
+{% endfor %}
+{% if current_tags.size > 0 %}
+  <hr />
+  {% capture 'label' %}<span class="label label-warning">Clear Selected Tags</span>{% endcapture %}
+  {% if template == 'collection' %}
+    {{ label | link_to_tag:'' }}
+  {% else %}
+    <a href="{{ tag-list.url }}">{{ label }}</a>
+  {% endif %}
+{% endif %}

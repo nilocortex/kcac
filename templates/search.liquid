@@ -1,0 +1,85 @@
+{% comment %}
+
+  This search template uses a technique described by me to allow older browsers (IE6-8)
+  to use responsive styles through the use of Respond.js. Traditionally, Respond.js
+  support on Shopify sites has failed due to the way Shopify delivers javascript and
+  stylesheets from its CDN.
+
+  For more information, see http://gavinballard.com/using-respond.js-with-shopify-redux/.
+
+{% endcomment %}
+{% include 'variables' %}
+
+{% paginate search.results by 10 %}
+
+{% if search.terms == respond_js_hash %}
+  {% include 'respond' %}
+{% elsif search.terms == selectivizr_css_hash %}
+  {% include 'selectivizr' %}
+{% else %}
+<header class="page-header">
+  <h1>Search</h1>
+</header>
+
+<!-- Search Box -->
+<form action="/search" role="form">
+<div class="row">
+  <div class="col-md-4">
+      <div class="input-group">
+        <input type="search" name="q" value="{{ search.terms }}" placeholder="Enter a search term..." class="form-control" />
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span> Search</button>
+        </span>
+      </div>
+  </div>
+</div>
+</form>
+
+<!-- Feedback on number of results found. -->
+{% if search.performed %}
+<div class="row">
+  <div class="col-md-12">
+    <hr />
+    <p class="lead">
+      {% if search.results.size == 0 %}
+        No results found for &ldquo;{{ search.terms }}&rdquo;.
+      {% else %}
+        {{ paginate.items }} {{ paginate.items | pluralize: 'result', 'results' }} found for &ldquo;{{ search.terms }}&rdquo;:
+      {% endif %}
+    </p>
+  </div>
+</div>
+{% endif %}
+
+<!-- Display Results -->
+{% if search.performed and search.results.size > 0 %}
+<div class="row">
+  <div class="col-md-12">
+    <ul class="media-list">
+      {% for item in search.results %}
+      <li class="media">
+        <a href="{{ item.url }}" class="pull-left">
+          <img class="media-object" src="{{ item.featured_image | product_img_url: 'small' }}" alt="{{ item.title }}" />
+        </a>
+        <div class="media-body">
+          <h4 class="media-heading">
+            <a href="{{ item.url }}">{{ forloop.index | plus: paginate.current_offset }}. {{ item.title }}</a>
+          </h4>
+          <p>
+            {{ item.content | strip_html | truncatewords: 40 | highlight: search.terms }}
+          </p>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+    {% include 'pagination' with 'result' %}
+  </div>
+</div>
+{% endif %}
+{% endif %}
+{% endpaginate %}

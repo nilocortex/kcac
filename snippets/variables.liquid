@@ -1,0 +1,21 @@
+{% comment %}
+
+  This snippet is included once at the start of the page.
+  It's used to set up Liquid template variables that may be
+  used in the rest of the page.
+
+{% endcomment %}
+{% comment %}-- Sidebar positioning classes. --{% endcomment %}
+{% if settings.sidebar_position == 'left' %}
+	{% assign sidebar_class_sidebar = "col-sm-4 col-sm-pull-8 col-md-3 col-md-pull-9" %}
+	{% assign sidebar_class_content = "col-sm-8 col-sm-push-4 col-md-9 col-md-push-3" %}
+{% elsif settings.sidebar_position == 'right' %}
+	{% assign sidebar_class_sidebar = "col-sm-4 col-md-3" %}
+	{% assign sidebar_class_content = "col-sm-8 col-md-9" %}
+{% else %}
+	{% assign sidebar_class_sidebar = "" %}
+	{% assign sidebar_class_content = "col-xs-12" %}
+{% endif %}
+
+{% capture respond_js_hash %}{{ 'repond_js' | md5 }}{% endcapture %}
+{% capture selectivizr_css_hash %}{{ 'selectivizr_css' | md5 }}{% endcapture %}

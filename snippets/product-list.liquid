@@ -1,0 +1,36 @@
+{% comment %}
+
+  This snippet is used to render a list or grid of products. The argument
+  passed when including this widget defines how many products per row will
+  be display, eg:
+
+    {% include 'product-list' with '3' %}
+    renders three products per row.
+
+  The number of products per row must be a factor of 12 - meaning that the
+  only valid arguments are 1, 2, 3, 4, 6 and 12.
+
+{% endcomment %}
+{% if product-list == '1' %}
+  {% capture iteration %}{% cycle '1' %}{% endcapture %}
+{% elsif product-list == '2' %}
+  {% capture iteration %}{% cycle '1', '2' %}{% endcapture %}
+{% elsif product-list == '3' %}
+  {% capture iteration %}{% cycle '1', '2', '3' %}{% endcapture %}
+{% elsif product-list == '4' %}
+  {% capture iteration %}{% cycle '1', '2', '3', '4' %}{% endcapture %}
+{% elsif product-list == '6' %}
+  {% capture iteration %}{% cycle '1', '2', '3', '4', '5', '6' %}{% endcapture %}
+{% endif %}
+
+{% if iteration == '1' %}
+<div class="row">
+{% endif %}
+
+  <div class="col-md-{{ 12 | divided_by: product-list }}">
+    {% include 'product' with product %}
+  </div>
+
+{% if (iteration == product-list) or forloop.last %}
+</div>
+{% endif %}

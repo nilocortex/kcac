@@ -1,0 +1,46 @@
+<header class="page-header">
+  <h1>Your Account <small>Activate Account</small></h1>
+</header>
+
+<!-- Activate Account Form -->
+<div class="row">
+  <div class="col-md-4">
+
+    {% form 'activate_customer_password' %}
+
+      <span class="help-block">Create your password to activate your account.</span>
+
+      <!-- Display any reset errors. -->
+      {% if form.errors %}
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title">Activation failed.</h3>
+        </div>
+        <div class="panel-body">
+          <p>There was a problem activating your account.</p>
+          <p>Please check that you typed your desired password correctly both times.</p>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="form-group">
+        <label for="customer[password]">New Password</label>
+        <input type="password" class="form-control" id="customer[password]" name="customer[password]" value="" />
+      </div>
+
+      <div class="form-group">
+        <label for="customer[password_confirmation]">Confirm New Password</label>
+        <input type="password" class="form-control" id="customer[password_confirmation]" name="customer[password_confirmation]" />
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">Activate Account</button>
+      </div>
+
+      <hr />
+      <p class="text-center">
+        <button type="submit" name="decline" class="btn btn-link btn-block">Decline Invitation</button>
+      </p>
+    {% endform %}
+  </div>
+</div>

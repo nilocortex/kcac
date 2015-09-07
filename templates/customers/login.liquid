@@ -1,0 +1,114 @@
+<header class="page-header">
+  <h1>Your Account <small>Login</small></h1>
+</header>
+
+<!-- Login Form -->
+<div class="row">
+  <div class="col-md-4">
+
+    <div class="recover-toggle">
+
+      <!-- Regular Login Form -->
+      {% form 'customer_login' %}
+
+        <!-- Display any login errors. -->
+        {% if form.errors %}
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">Login failed</h3>
+          </div>
+          <div class="panel-body">
+            Please check your username and password and try again.
+          </div>      
+        </div>
+        {% endif %}
+
+        <!-- Login Email Address -->
+        <div class="form-group">
+          <label for="customer[email]">Email Address</label>
+          <input class="form-control" type="email" id="customer[email]" name="customer[email]" value="" placeholder="Your Email Address" />
+        </div>
+
+        <!-- Login Password (If Required) -->
+        {% if form.password_needed %}
+        <div class="form-group">
+          <label for="customer[password]">Password</label>
+          <input class="form-control" type="password" id="customer[password]" name="customer[password]" value="" placeholder="Your Password" />
+        </div>
+        {% endif %}
+
+        <!-- Login Button -->
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+        </div>
+      {% endform %}
+
+      <!-- Continue as Guest Button (if permitted) -->
+      {% if shop.checkout.guest_login %}
+      {% form 'guest_login' %}
+        <span class="help-block text-center">or</span>
+        <div class="form-group">
+          <button type="submit" class="btn btn-info btn-lg btn-block">Continue as Guest</button>
+        </div>
+      {% endform %}
+      {% endif %}
+
+      <!-- Recover Password / New Account Links -->
+      <hr />
+      <p class="text-center">
+        <a href="#" onclick="toggleRecoverPasswordForm(); return false;">Forgotten Password</a>
+        {% if shop.customer_accounts_optional %}
+        &middot;
+        <a href="/account/register">Register New Account</a>
+        {% endif %}
+      </p>
+
+    </div> <!-- End Recover Toggle Div -->
+
+    <!-- Recover Password Form -->
+    <div class="recover-toggle" style="display: none;">
+      {% form 'recover_customer_password' %}
+
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">Forgotten Password</h3>
+          </div>
+          <div class="panel-body">
+            Enter your email address, and we'll send you an email with a way to reset your password.
+          </div>      
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input class="form-control" type="email" id="email" name="email" value="" placeholder="Your Email Address" />
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+        </div>
+
+        <hr />
+        <p class="text-center">
+          <a href="#" onclick="toggleRecoverPasswordForm(); return false;">Never Mind</a>
+        </p>
+      {% endform %}
+    </div>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  /**
+   * A very simple Javascript function to show/hide the recover password form.
+   * Doesn't require jQuery or any other libraries and follows the patterns
+   * suggested on the Shopify site.
+   */
+  function toggleRecoverPasswordForm() {
+    var toggleElements = document.getElementsByClassName('recover-toggle');
+    for(var i = 0; i < toggleElements.length; i++) {
+      toggleElements[i].style.display = (toggleElements[i].style.display == 'none') ? 'block' : 'none';
+    }
+  }
+
+  if (window.location.hash == '#recover') { toggleRecoverPasswordForm() }
+</script>

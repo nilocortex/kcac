@@ -1,0 +1,77 @@
+{% comment %}
+
+  This snippet adds markup to improve the experience of sharing Shopify pages on social networks. It includes:
+    - Open Graph markup for pages that share content on Facebook
+    - Twitter Card markup for pages that share content on Twitter
+
+  You can check that your Open Graph data is being read by Facebook using their debug tool:
+   - http://developers.facebook.com/tools/debug
+
+  You can check that your Twitter Card data is being read by Twitter using their validator tool
+   - https://dev.twitter.com/docs/cards/validation/validator
+
+  For more information on Open Graph data on Shopify, check out the following forum threads (some are pretty old):
+   - http://ecommerce.shopify.com/c/ecommerce-design/t/customize-meta-tags-in-product-head-53414
+   - http://ecommerce.shopify.com/c/ecommerce-design/t/getting-facebook-to-use-your-custom-metadata-60026
+   - http://ecommerce.shopify.com/c/ecommerce-design/t/when-a-link-from-my-site-is-shared-on-facebook-it-pulls-the-wrong-description-56346
+
+  For more information on the Open Graph in general, check out:
+   - http://ogp.me/
+   - http://developers.facebook.com/docs/opengraph/
+
+  For more information on Twitter Cards, check out:
+   - https://dev.twitter.com/docs/cards
+
+{% endcomment %}
+{% if template contains 'product' %}
+  <meta name="og:type" content="product" />
+  <meta name="og:url" content="{{ canonical_url }}" />
+  <meta name="og:image" content="{{ product.featured_image | product_img_url: 'compact' }}" />
+  <meta name="og:title" content="{{ product.title | escape }}" />
+  <meta name="og:description" content="{{ product.description | strip_html | strip_newlines | escape }}" />
+
+  <meta name="twitter:card" content="product">
+  <meta name="twitter:title" content="{{ product.title | escape }}" />
+  <meta name="twitter:description" content="{{ product.description | strip_html | strip_newlines | truncatewords: 160, '' | escape  }}" />
+  <meta name="twitter:image" content="http:{{ product.featured_image | product_img_url: 'medium' }}" />
+  <meta name="twitter:data1" content="{{ product.price | money_with_currency }}">
+  <meta name="twitter:label1" content="PRICE">
+  {% if product.available %}
+    <meta name="twitter:data2" content="In stock!">
+  {% else %}
+    <meta name="twitter:data2" content="Out of stock">
+  {% endif %}
+  <meta name="twitter:label2" content="AVAILABILITY">
+
+{% elsif template contains 'article' %}
+  <meta name="og:type" content="article" />
+  <meta name="og:url" content="{{ canonical_url }}" />
+  <meta name="og:title" content="{{ article.title | escape }}" />
+  <meta name="og:description" content="{{ article.excerpt_or_content | strip_html | truncatewords: 100, '' | escape  }}" />
+  <meta name="article:published_time" content="{{ article.published_at | date:"%Y-%m-%dT%H:%M:%SZ" }}" />
+  {% for tag in article.tags %}
+  <meta name="article:tag" content="{{ tag }}" />
+  {% endfor %}
+  {% if article.content contains '<img' %}
+    {% assign src = article.content | split: 'src="' %}
+    {% assign src = src[1] | split: '"' | first | replace: '//cdn', 'http://cdn' | replace: 'http:http://', 'http://' | remove: 'https:'  %}
+    {% if src %}<meta name="og:image" content="{{ src }}" />{% endif %}
+  {% endif %}
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ article.title }}" />
+  <meta name="twitter:description" content="{{ article.excerpt_or_content | strip_html | truncatewords: 160, '' | escape  }}" />
+  {% if article.content contains "<img" %}
+    {% assign src = article.content | split: 'src="' %}
+    {% assign src = src[1] | split: '"' | first | replace: '//cdn', 'http://cdn' | replace: 'http:http://', 'http://' | remove: 'https:'  %}
+    {% if src %}<meta property="twitter:image" content="{{ src }}" />{% endif %}
+  {% endif %}
+{% else %}
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ shop.name | truncatewords: 70, '' }}" />
+  <meta name="twitter:description" content="{{ page_description | strip_html | truncatewords: 160, '' | escape  }}" />
+  {% if settings.logo_image == 'logo.png' %}
+    <meta name="twitter:image" content="{{ 'logo.png' | asset_url }}" />
+  {% endif %}
+{% endif %}
+<meta name="og:site_name" content="{{ shop.name | escape }}" />

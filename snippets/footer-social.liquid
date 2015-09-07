@@ -1,0 +1,23 @@
+{% comment %}
+
+  This snippet renders a list of active social contact icons in the
+  site footer. Like the footer-pay.liquid snippet, it's only used in
+  one place, but has been extracted into a snippet to keep the main
+  theme.liquid tidy.
+
+{% endcomment %}
+{% for setting in settings %}
+  {% if setting[0] contains 'social_show_' and setting[1] %}
+    {% capture social_type %}{{ setting[0] | replace: 'social_show_', '' }}{% endcapture %}
+    {% capture social_url_setting %}social_url_{{ social_type }}{% endcapture %}
+    {% if social_type == 'email' %}
+    <li>
+      <a href="mailto:{{ settings[social_email_address] }}" title="Email {{ shop.name }}"><span class="sprite sprite-social social_{{ social_type }}"></span></a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{{ settings[social_url_setting] }}" title="{{ shop.name }} on {{ social_type | captialize }}"><span class="sprite sprite-social social_{{ social_type }}"></span></a>
+    </li>
+    {% endif %}
+  {% endif %}
+{% endfor %}

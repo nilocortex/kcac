@@ -1,0 +1,50 @@
+{% comment %}
+
+  This is a special-case snippet for rendering a collections list.
+  It's a snippet, not a page, due to one of Shopify's quirks.
+
+  For more information, see:
+   - http://docs.shopify.com/manual/configuration/store-customization/taking-control-of-collections-listing
+
+{% endcomment %}
+<header>
+  <div class="container">
+    <h1 class="page-header">Collections</h1>
+    <p class="lead">
+      {{ collections.size }} {{ collections.size | pluralize: 'collection', 'collections' }} to browse
+    </p>
+  </div>
+</header>
+
+<div class="container">
+
+    {% if collections.size == 0 %}
+      We don't have any collections!
+    {% else %}
+
+      {% for collection in collections %}
+        {% capture iteration %}{% cycle '1', '2', '3' %}{% endcapture %}
+        {% if iteration == '1' %}
+        <div class="row">
+        {% endif %}
+
+          <div class="span4">
+            <a href="{{ collection.url }}" title="{{ collection.title | escape }}" class="thumbnail">
+              {% if collection.image %}
+                <img src="{{ collection.image | collection_img_url: 'small' }}" alt="{{ collection.title | escape }}" />
+              {% else %}
+                <img src="{{ collection.products.first.featured_image | product_img_url: 'small' }}" alt="{{ collection.title | escape }}" />
+              {% endif %}
+            </a>
+
+            <h5>{{ collection.title | escape }} <small>{{ collection.all_products_count }} {{ collection.all_products_count | pluralize: 'item', 'items' }}</small></h5>
+          </div>
+
+        {% if iteration == '3' or forloop.last %}
+        </div>
+        {% endif %}
+      {% endfor %}
+
+    {% endif %}
+
+</div>

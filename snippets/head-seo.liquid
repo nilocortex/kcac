@@ -1,0 +1,24 @@
+{% comment %}
+
+  This snippet adds tags that are helpful for SEO and usability purposes.
+  It adds:
+    - The page title, with content dependent on the current page;
+    - A meta description tag, with content dependent on the current page; and
+    - A rel="canonical" link, which prevents search engine penalties for
+      duplicate content (for example, when the same product is found at
+      multiple URLs because it exists in multiple collections).
+
+  For more information, see:
+   - http://docs.shopify.com/support/other/general-information/seo-for-theme-designers
+
+{% endcomment %}
+{% if template == 'index' %}
+<title>{{ shop.name }} • {{ page_title }}</title>
+<meta name="description" content="{{ shop.description }}">
+{% elsif template == '404' %}
+<title>Page Not Found • {{ shop.name }}</title>
+{% else %}
+<title>{{ page_title }} • {{ shop.name }}</title>
+<meta name="description" content="{{ page_description }}" />
+{% endif %}
+<link rel="canonical" href="{{ canonical_url }}" />

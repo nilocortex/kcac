@@ -1,0 +1,50 @@
+{% comment %}
+
+  This snippet renders a Bootstrap carousel, with the images and products
+  specified in the theme settings.
+
+  For more information, see:
+   - http://getbootstrap.com/javascript/#carousel
+
+{% endcomment %}
+<div id="carousel" data-interval="5000" class="carousel slide">
+  <!-- Carousel Indicators -->
+  <ol class="carousel-indicators">
+    {% for i in (1..5) %}
+      {% capture setting_show %}slideshow_show_{{i}}{% endcapture %}
+      {% if settings[setting_show] %}
+        <li data-target="#carousel" data-slide-to="{{forloop.index}}" class="{% if forloop.first %}active{% endif %}"></li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+
+  <!-- Carousel Items -->
+  <div class="carousel-inner" role="listbox">
+    {% for i in (1..5) %}
+
+      {% capture setting_show %}slideshow_show_{{i}}{% endcapture %}
+      {% capture setting_url %}slideshow_url_{{i}}{% endcapture %}
+      {% capture setting_title %}slideshow_title_{{i}}{% endcapture %}
+      {% capture setting_description %}slideshow_description_{{i}}{% endcapture %}
+
+      {% if settings[setting_show] %}
+      <div class="item {% if forloop.first %}active{% endif %}">
+        {% unless settings[setting_url] == '' %}<a href="{{ settings[setting_url] }}">{% endunless %}
+          <img src="{{ 'slideshow-image-' | append:i | append:'.jpg' | asset_url }}" {% if settings[setting_title] %}alt="{{ settings[setting_title] }}"{% endif %} />
+
+          {% if settings[setting_title] or settings[setting_description] %}
+          <div class="carousel-caption">
+            {% if settings[setting_title] %}<h4>{{ settings[setting_title] }}</h4>{% endif %}
+            {% if settings[setting_description] %}<p>{{ settings[setting_description] }}</p>{% endif %}
+          </div>
+          {% endif %}
+        {% unless settings[setting_url] == '' %}</a>{% endunless %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Carousel Navigation -->
+  <a class="carousel-control left" href="#carousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+  <a class="carousel-control right" href="#carousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+</div>

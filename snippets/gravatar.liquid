@@ -1,0 +1,17 @@
+{% comment %}
+
+  This snippet renders a 50x50 Gravatar using the email address passed
+  to the snippet, eg:
+    {% include 'gravatar' with 'gavin@bootstrapforshopify.com' %}
+    renders my Gravatar.
+
+  It uses the 100x100 size Gravatar but renders at 50x50 so that the
+  resulting image isn't pixelated on retina screens.
+
+  For more information on Gravatars, see:
+   - http://en.gravatar.com/support/what-is-gravatar/
+   - http://docs.shopify.com/themes/liquid-basics/output
+
+{% endcomment %}
+{% capture 'url' %}//www.gravatar.com/avatar/{{ gravatar | remove: ' ' | strip_newlines | downcase | md5 }}?s=100{% endcapture %}
+<img class="pull-left img-circle" src="{{ url }}" width="50" height="50" style="width: 50px; height: 50px;" />

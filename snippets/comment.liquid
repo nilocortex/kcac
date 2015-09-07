@@ -1,0 +1,17 @@
+{% comment %}
+
+  This snippet renders a comment on a blog article with a Gravatar.
+
+  For more information, see:
+   - http://docs.shopify.com/themes/liquid-variables/comment
+   - http://getbootstrap.com/components/#media
+
+{% endcomment %}
+<hr />
+<div class="media">
+  {% include 'gravatar' with comment.email %}
+  <div class="media-body">
+    <h4 class="media-heading">{{ comment.author }} <small>{{ comment.created_at | date:'%B %d, %Y' }}</small></h4>
+    {{ comment.content }}
+  </div>
+</div>

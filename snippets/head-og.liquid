@@ -1,0 +1,39 @@
+{% comment %}
+
+  This snippet adds Open Graph markup for pages that share content on Facebook.
+
+  You can check that your Open Graph data is being read by Facebook using their debug tool:
+   - http://developers.facebook.com/tools/debug
+
+  For more information on Open Graph data on Shopify, check out the following forum threads (some are pretty old):
+   - http://ecommerce.shopify.com/c/ecommerce-design/t/customize-meta-tags-in-product-head-53414
+   - http://ecommerce.shopify.com/c/ecommerce-design/t/getting-facebook-to-use-your-custom-metadata-60026
+   - http://ecommerce.shopify.com/c/ecommerce-design/t/when-a-link-from-my-site-is-shared-on-facebook-it-pulls-the-wrong-description-56346
+
+   For more information on the Open Graph in general, check out:
+    - http://ogp.me/
+    - http://developers.facebook.com/docs/opengraph/
+
+{% endcomment %}
+{% if template contains 'product' %}
+  <meta property="og:type" content="product" />
+  <meta property="og:url" content="{{ canonical_url }}" />
+  <meta property="og:image" content="{{ product.featured_image | product_img_url: 'compact' }}" />
+  <meta property="og:title" content="{{ product.title | escape }}" />
+  <meta property="og:description" content="{{ product.description | strip_html | escape }}" />
+{% elsif template contains 'article' %}
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{ canonical_url }}" />
+  <meta property="og:title" content="{{ article.title | escape }}" />
+  <meta property="og:description" content="{{ article.excerpt_or_content | strip_html | truncatewords: 100, '' | escape  }}" />
+  <meta property="article:published_time" content="{{ article.published_at | date:"%Y-%m-%dT%H:%M:%SZ" }}" />
+  {% for tag in article.tags %}
+  <meta property="article:tag" content="{{ tag }}" />
+  {% endfor %}
+  {% if article.content contains '<img' %}
+    {% assign src = article.content | split: 'src="' %}
+    {% assign src = src[1] | split: '"' | first | replace: '//cdn', 'http://cdn' | replace: 'http:http://', 'http://' | remove: 'https:'  %}
+    {% if src %}<meta property="og:image" content="{{ src }}" />{% endif %}
+ {% endif %}
+{% endif %}
+<meta property="og:site_name" content="{{ shop.name | escape }}" />

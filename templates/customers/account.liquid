@@ -1,0 +1,81 @@
+<header class="page-header">
+  <h1>Your Account <small>Account Summary</small></h1>
+</header>
+
+<div class="row">
+
+  <!-- Account Details -->
+  <div class="col-md-4">
+    <h3>Account Details</h3>
+
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>{{ customer.name }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            {% if customer.email %}
+            <a href="mailto:{{ customer.email }}">{{ customer.email }}</a><br />
+            {% endif %}
+            {% if customer.default_address != nil %}
+              {{ customer.default_address.address1 }}<br />
+              {% if customer.default_address.address2 != "" %}
+              {{ customer.default_address.address2 }}<br />
+              {% endif %}
+              {{ customer.default_address.city}}, {% if address.province_code %}{{customer.default_address.province_code}}, {% endif %}{{customer.default_address.country}}<br />
+              {{ customer.default_address.zip}}<br />
+              {{ customer.default_address.phone }}
+            {% endif %}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>
+            <a href="/account/addresses">Manage Addresses ({{ customer.addresses_count }})</a>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- Order History -->
+  <div class="col-md-8">
+    <h3>Order History</h3>
+
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Date</th>
+          <th>Payment Status</th>
+          <th>Fulfilment Status</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% if customer.orders.size != 0 %}
+      {% for order in customer.orders %}
+        <tr class="{% if order.cancelled %}error{% endif %}">
+          <td>{{ order.name | link_to: order.customer_url }}</td>
+          <td>{{ order.created_at | date: "%b %d, %Y" }}</td>
+          <td>{{ order.financial_status }}</td>
+          <td>{{ order.fulfillment_status }}</td>
+          <td>{{ order.total_price | money }}</td>
+        </tr>
+      {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="5">
+            <em>No orders placed.</em>
+          </td>
+        </tr>
+      {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+</div>

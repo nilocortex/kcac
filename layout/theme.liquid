@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="{{ shop.name }}">
+
+  {% include 'variables' %}
+
+  <!-- Bootstrap Core CSS -->
+  <link href="{{ 'css-bootstrap-min.css' | asset_url }}" rel="stylesheet">
+  <link href="{{ 'css-bs4sf.css' | asset_url }}" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js support for HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="{{ 'js-html5shiv-min.js' | asset_url }}"></script>
+    <script src="{{ 'js-respond-min.js' | asset_url }}"></script>
+    <link href="{{ 'respond-proxy.html' | asset_url | split: '?' | first }}" id="respond-proxy" rel="respond-proxy" />
+    <link href="{{ shop.url }}/search?q={{ respond_js_hash }}" id="respond-redirect" rel="respond-redirect" />
+    <script src="{{ shop.url }}/search?q={{ respond_js_hash }}" type="text/javascript"></script>
+  <![endif]-->
+
+  {{ content_for_header }}
+
+  <!-- Include Main SEO Tags -->
+  {% include 'head-seo' %}
+
+  <!-- Include Social Meta Tags -->
+  {% include 'head-social' %}
+
+  <!-- Conditionally include Shopify's required customer Javascript on customer pages. -->
+  <!-- Needs to be in the head because Shopify's code assumes it's available in the body. -->
+  {% if template contains 'customers' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+    {{ 'customer_area.js' | shopify_asset_url | script_tag }}
+  {% endif %}
+
+  <!-- Conditionally include Shopify's option selection code for product pages. -->
+  {% if template == 'product' %}
+  {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+  {% endif %}
+</head>
+
+<body>
+  <!-- Skip navigation (for screen read accessibility) -->
+  <a href="#content" class="sr-only">Skip to main content</a>
+
+  <!-- Navbar -->
+  {% include 'navbar' %}
+
+  <!-- Slideshow, if we'd like it full width. -->
+  {% if settings.slideshow_position == "full" and template == "index" %}{% include 'slideshow' %}{% endif %}
+
+  <!-- Content -->
+  <section id="content" class="container">
+    <!-- Slideshow, if we'd like it within the page container. -->
+    {% if settings.slideshow_position == "top" and template == "index" %}{% include 'slideshow' %}{% endif %}
+    <div class="row">
+      <div class="{{ sidebar_class_content }}">
+        <!-- Slideshow, if we'd like it within the content container. -->
+        {% if settings.slideshow_position == "content" and template == "index" %}{% include 'slideshow' %}{% endif %}
+        <!--
+          Shopify doesn't let us override list-collections.liquid directly.
+          Instead, we have to use this hack to customise our /collections and /products pages.
+        -->
+        {% if template == 'list-collections' %}
+          {% include 'collection-listing' %}
+        {% else %}
+          {{ content_for_layout }}
+        {% endif %}
+      </div>
+
+      <!-- Sidebar if required. -->
+      {% unless settings.sidebar_position == blank %}
+        {% include 'sidebar' %}
+      {% endunless %}
+    </div>
+  </section>
+
+  <!-- Site Footer -->
+  {% include 'footer' %}
+
+  <!-- Bootstrap and core Bootstrap for Shopify Javascript -->
+  {{ 'js-jquery-min.js' | asset_url | script_tag }}
+  {{ 'js-bootstrap-min.js' | asset_url | script_tag }}
+  {{ 'js-bs4sf-min.js' | asset_url | script_tag }}
+
+  <!-- If we're on a product page, set up product page. -->
+  {% if template == 'product' %}
+  <script type="text/javascript">
+    jQuery(function() {
+      Shopify.BS4SF.setupProductPage({{ product | json }}, {
+        show_sale_tag: {{ settings.product_show_sale_tag }},
+        money_format: "{{ shop.money_format }}",
+        money_with_currency_format: "{{ shop.money_with_currency_format }}"
+      });
+    });
+  </script>
+  {% endif %}
+</body>
+</html>

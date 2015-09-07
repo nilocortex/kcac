@@ -1,0 +1,22 @@
+{% comment %}
+
+  This snippet can be used to render a Twitter, Facebook, or Pinterest
+  button widget, depending on the argument it's included with, eg:
+
+    {% include 'social-widget' with 'facebook' %}
+    renders a Facebook 'Like' button for the current page.
+
+  For more information, see:
+   - http://docs.shopify.com/manual/configuration/store-customization/social-media-button
+
+{% endcomment %}
+{% if social-widget == 'twitter' %}
+<!-- See: http://wiki.shopify.com/Adding_a_Tweet_Button_to_your_Content -->
+<a href="http://twitter.com/share" data-url="{{ shop.url }}{{ product.url }}" data-text="{{ product.title | escape }} by {{ product.vendor | escape }}" class="twitter-share-button" data-count="horizontal" data-via="{% if settings.social_url_twitter %}{{ settings.social_url_twitter }}{% endif %}">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+{% endif %}
+{% if social-widget == 'facebook' %}
+<iframe src="//www.facebook.com/plugins/like.php?href={{ shop.url }}{{ product.url }}&amp;send=false&amp;layout=button_count&amp;width=110&amp;show_faces=false&amp;colorscheme=light&amp;action=like&amp;height=20" scrolling="no" frameborder="0" style="border: none; overflow: hidden; width: 110px; height: 20px"></iframe>
+{% endif %}
+{% if social-widget == 'pinterest' %}
+<a href="http://pinterest.com/pin/create/button/?url={{ shop.url }}{{ product.url }}&amp;media={{ product.featured_image | product_img_url: 'compact' | split:'?' | first  }}&amp;description={{ product.title | escape | replace:' ','%20' }}" class="pin-it-button" count-layout="none">Pin It</a><script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+{% endif %}
